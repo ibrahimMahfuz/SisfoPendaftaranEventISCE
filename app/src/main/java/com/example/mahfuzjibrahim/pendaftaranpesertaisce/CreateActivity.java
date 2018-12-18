@@ -1,14 +1,20 @@
 package com.example.mahfuzjibrahim.pendaftaranpesertaisce;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,8 +23,11 @@ import android.widget.Toast;
 
 import com.example.mahfuzjibrahim.pendaftaranpesertaisce.Model.PesertaList;
 import com.example.mahfuzjibrahim.pendaftaranpesertaisce.Model.PesertaModel;
+import com.example.mahfuzjibrahim.pendaftaranpesertaisce.Model.PesertaPostModel;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,8 +53,16 @@ public class CreateActivity extends AppCompatActivity {
         m_email = findViewById(R.id.in_email);
         m_phone = findViewById(R.id.in_phone);
         m_institusi = findViewById(R.id.in_institusi);
-        m_photo = findViewById(R.id.imageView2);
+        m_photo = findViewById(R.id.in_photo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId()==android.R.id.home) {
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void create_peserta(View v){
@@ -56,9 +73,8 @@ public class CreateActivity extends AppCompatActivity {
 
         String email = m_email.getText().toString();
 
-//        Toast.makeText(CreateActivity.this,email,Toast.LENGTH_LONG).show();
 
-        PesertaModel pesertaModel = new PesertaModel(m_judl_kegiatan.getSelectedItem().toString(),m_nama_pes.getText().toString(),email,m_phone.getText().toString(),m_institusi.getText().toString(),encodedImage);
+        PesertaPostModel pesertaPostModel = new PesertaPostModel(m_judl_kegiatan.getSelectedItem().toString(),m_nama_pes.getText().toString(),email,m_phone.getText().toString(),m_institusi.getText().toString(),encodedImage);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://tugaspmobkelptiga.herokuapp.com/")
@@ -66,11 +82,11 @@ public class CreateActivity extends AppCompatActivity {
                 .build();
 
         IsceClient client = retrofit.create(IsceClient.class);
-        Call<PesertaModel> call = client.create_peserta(pesertaModel);
+        Call<PesertaPostModel> call = client.create_peserta(pesertaPostModel);
 
-        call.enqueue(new Callback<PesertaModel>() {
+        call.enqueue(new Callback<PesertaPostModel>() {
             @Override
-            public void onResponse(Call<PesertaModel> call, Response<PesertaModel> response) {
+            public void onResponse(Call<PesertaPostModel> call, Response<PesertaPostModel> response) {
                 if (!response.isSuccessful()){
                     Toast.makeText(CreateActivity.this,response.code(), Toast.LENGTH_LONG).show();
                     return;
@@ -80,19 +96,25 @@ public class CreateActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<PesertaModel> call, Throwable t) {
-                Toast.makeText(CreateActivity.this,"Ok......", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<PesertaPostModel> call, Throwable t) {
+                Toast.makeText(CreateActivity.this,"NOOOOO", Toast.LENGTH_LONG).show();
             }
         });
 
-        Intent maiIntent = new Intent(CreateActivity.this,MainActivity.class);
-        startActivity(maiIntent);
     }
 
     public void getPicture(View v){
         Intent fotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (fotoIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(fotoIntent, 1);
+        }
+    }
+
+    public void getGalery(View v){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        if (photoPickerIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(photoPickerIntent, 2);
         }
     }
 
@@ -108,12 +130,22 @@ public class CreateActivity extends AppCompatActivity {
                 }
 
                 break;
-            case 0:
+            case 2:
                 if(resultCode == RESULT_OK){
-//                    Uri selectedImage = imageReturnedIntent.getData();
-//                    imageview.setImageURI(selectedImage);
+                    try {
+                        final Uri imageUri = data.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        m_photo.setImageBitmap(selectedImage);
+                        bm = selectedImage;
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                        Toast.makeText(CreateActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
+                    }
+
                 }
                 break;
         }
     }
+
 }

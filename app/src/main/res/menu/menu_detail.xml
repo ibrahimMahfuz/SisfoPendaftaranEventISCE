@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.mahfuzjibrahim.pendaftaranpesertaisce.DetailActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_favorite_border_black_24dp"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="favorite"
         app:showAsAction="never" />
 </menu>

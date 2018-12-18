@@ -2,10 +2,10 @@
     <string name="app_name">Pendaftaran Peserta ISCE</string>
     <string name="action_settings">Settings</string>
     <string-array name="judul_kegiatan">
-        <item>HACKATHON</item>
-        <item>O K</item>
-        <item>BAZAR</item>
-        <item>SEMINAR</item>
+        <item>Hackathon</item>
+        <item>Olkom</item>
+        <item>Bazar</item>
+        <item>Seminar</item>
     </string-array>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="large_text">

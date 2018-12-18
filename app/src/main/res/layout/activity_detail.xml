@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e2e2e2"
     android:fitsSystemWindows="true"
     tools:context=".DetailActivity">
 
@@ -12,16 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:fitsSystemWindows="true"
+        android:onClick="changeFav"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/ic_camera_alt_black_24dp"
             android:fitsSystemWindows="true"
             app:contentScrim="@color/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            android:background="@drawable/ic_camera_alt_black_24dp"
             app:toolbarId="@+id/toolbar">
 
 

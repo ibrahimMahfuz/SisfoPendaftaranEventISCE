@@ -28,6 +28,33 @@ public class PesertaModel implements Parcelable {
     @SerializedName("photo_path")
     private String photoPath;
 
+    @SerializedName("created_at")
+    private String createdAt;
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public static Creator<PesertaModel> getCREATOR() {
+        return CREATOR;
+    }
+
+    public PesertaModel(Integer id, String judulKegiatan, String namaPeserta, String email, String noHp, String institusi, String photoPath, String createdAt) {
+        this.id = id;
+        this.judulKegiatan = judulKegiatan;
+        this.namaPeserta = namaPeserta;
+        this.email = email;
+        this.noHp = noHp;
+        this.institusi = institusi;
+        this.photoPath = photoPath;
+        this.createdAt = createdAt;
+    }
+
+
     public PesertaModel(String judulKegiatan, String namaPeserta, String email, String noHp, String institusi, String photoPath) {
         this.judulKegiatan = judulKegiatan;
         this.namaPeserta = namaPeserta;
@@ -119,6 +146,7 @@ public class PesertaModel implements Parcelable {
         dest.writeString(this.noHp);
         dest.writeString(this.institusi);
         dest.writeString(this.photoPath);
+        dest.writeString(this.createdAt);
     }
 
     protected PesertaModel(Parcel in) {
@@ -129,6 +157,7 @@ public class PesertaModel implements Parcelable {
         this.noHp = in.readString();
         this.institusi = in.readString();
         this.photoPath = in.readString();
+        this.createdAt = in.readString();
     }
 
     public static final Creator<PesertaModel> CREATOR = new Creator<PesertaModel>() {
